@@ -1,0 +1,26 @@
+{
+  "frozen": false,
+  "frozen_on": null,
+  "note": "Set frozen=true and frozen_on, then commit this file, BEFORE running final seeds. Values follow the Phase 2 spec and Phase 3 protocol (P1-P9 approved 26 Oct 2026).",
+  "seeds": {
+    "debug": [9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008, 9009, 9010],
+    "final": [1, 30],
+    "extra_max": 100
+  },
+  "params": {"theta": 0.65, "q_min": 0.5, "t_min": 0.6, "alpha": 0.1, "t0": 0.5},
+  "core": {
+    "scenarios": ["S1", "S2", "S3", "S4", "S5a", "S5b"],
+    "mechanisms": ["B1", "B2", "B3", "P-V", "P"],
+    "feedback": {"regime": "F0"}
+  },
+  "sweeps": {
+    "theta": {"scenario": "S2", "values": [0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9],
+              "mechanisms": ["B2", "B3", "P-V", "P", "EQ"]},
+    "q_min": {"scenario": "S4", "values": [0.0, 0.25, 0.5, 0.75],
+              "mechanisms": ["B2", "B3", "P-V", "P"]},
+    "feedback": {"scenario": "S2", "audit": [0.0, 0.05, 0.2], "delay": [0, 50, 200],
+                 "mechanisms": ["B3", "P-V", "P"]},
+    "alpha": {"scenario": "S2", "values": [0.05, 0.1, 0.2], "mechanisms": ["B3", "P-V", "P"]}
+  },
+  "windows": {"S2_post": 250}
+}
