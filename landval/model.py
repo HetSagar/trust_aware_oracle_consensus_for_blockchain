@@ -45,7 +45,7 @@ class Mechanism:
     name: str
     weight: str        # "equal" | "authority" | "trust" | "hybrid"
     rule: str          # "majority" (>50% of responders) | "threshold" (S_k >= theta)
-    coverage: str      # "count2" (>=2 of 3 responded) | "weighted" (Q_k >= q_min)
+    coverage: str      # "count2" (>=2 of 3 responded) | "weighted" (Q_k >= q_min) | "none" (A1)
     veto: bool         # restriction veto (P only)
     learns: bool       # trust updated from labels
 
@@ -163,8 +163,12 @@ def validate(reports: Reports, store: TrustStore, authority: Dict[Key, float],
         detail[k] = (q, s)
         if mech.coverage == "count2":
             low_cov = len(responders) < 2
-        else:
+        elif mech.coverage == "none":            # addendum A1 only
+            low_cov = False
+        elif mech.coverage == "weighted":
             low_cov = q < p.q_min - EPS
+        else:
+            raise ValueError(f"unknown coverage mode {mech.coverage}")
         if low_cov:
             reasons.append(f"{k}:LOW_COVERAGE")
             continue

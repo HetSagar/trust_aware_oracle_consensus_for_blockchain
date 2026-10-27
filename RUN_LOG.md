@@ -46,3 +46,9 @@ Appended automatically by run_experiments.py. Record the git commit hash by hand
 3. Wording when both protocol rows apply (significant AND CI inside ±Δ): "lower/higher, but smaller than Δ" (H1b).
 4. Wording when the CI excludes 0 opposite to a one-sided hypothesis: "opposite to hypothesis" (H5). The one-sided test cannot detect this, so the CI is reported.
 5. H3 (no direction, outside the Holm family) is worded from its unadjusted CI and labelled descriptive.
+
+## 2026-10-27 — addendum A1 committed before running
+- commit: e650d775d246687b230a6bb8a887aca2aff32417 (docs/addendum_A1_coverage.md); exploratory coverage-gate ablation
+- A1 run: `python run_addendum_coverage.py` (seeds 1–100, S1–S4, gates G0/G1/G2, F0); analysis: `python analysis/addendum_A1.py results/final analysis/out`.
+- Regression check passed: gate G2 reproduces the main-study counts exactly (2,000 runs).
+- Diagnostic: no weighted mechanism committed any transfer with a single-responder check under G2 (outages remove an office from all three checks, so a lone responder always fails coverage on another check).
