@@ -32,6 +32,17 @@ Final runs (Phase 5), in this order:
 3. `python run_experiments.py --seeds final` (seeds 1–30). The script refuses to run final seeds while the config is unfrozen.
 4. If the stopping rule triggers: `--n-final 40`, then 50, … up to 100.
 
+## Analysis (Phase 5)
+
+```bash
+python analysis/stats.py results/final/runs.csv analysis/out      # Table 2, stopping rule
+python analysis/figures.py results/final/runs.csv analysis/out    # Table 1, Fig. 1, Fig. 2
+python analysis/traces.py analysis/out/traces.md                  # example decision traces
+```
+
+`analysis/out/` holds every table and figure used in the paper, plus the data behind each figure.
+Final results use seeds 1–100 (the stopping rule ran to its cap; see RUN_LOG.md).
+
 ## Outputs (`results/<seedset>/`)
 
 - `runs.csv`: one row per experiment × scenario × seed × mechanism × setting × window, with raw counts and reason-code counts. S2 rows appear twice: window `all` and window `post250` (transfers 251–1000).

@@ -1,0 +1,14 @@
+{
+  "seeds": 100,
+  "all_precise": false,
+  "too_wide": [
+    {
+      "id": "H2b",
+      "half_width": 0.4223095187549827
+    },
+    {
+      "id": "H3",
+      "half_width": 0.2815529450410926
+    }
+  ]
+}
