@@ -1,4 +1,5 @@
-results/
+results/*/transfers_core.csv
+results/*/trust_core.csv
 __pycache__/
 .pytest_cache/
 *.pyc
