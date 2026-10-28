@@ -28,6 +28,7 @@ class Scenario:
     acc_override: Tuple[Tuple[Key, float], ...] = ()       # S3
     blind_restr: Tuple[str, ...] = ()                      # S5: oracles that always report "clear"
     authority: Tuple[Tuple[Key, float], ...] = tuple(DEFAULT_AUTHORITY.items())
+    shared_rho: float = 0.0                                # A2/R2: R and S wrong together
 
     def authority_dict(self) -> Dict[Key, float]:
         return dict(self.authority)
@@ -49,6 +50,7 @@ class World:
     truth: List[Dict[str, int]]          # per transfer: check -> +1 / -1
     reports: List[Reports]               # per transfer: (oracle, check) -> +1 / -1 / None
     audit_u: np.ndarray                  # per transfer: uniform draw for the audit sample
+    label_u: np.ndarray = None           # per transfer x check: uniform draw for label noise (A2/R3)
 
     def valid(self, t: int) -> bool:
         return all(v == PASS for v in self.truth[t].values())
@@ -56,11 +58,15 @@ class World:
 
 def make_world(sc: Scenario, seed: int) -> World:
     ss = np.random.SeedSequence(seed)
-    s_truth, s_report, s_outage, s_audit = ss.spawn(4)
+    # Children are indexed, so the first four streams are identical to the main study's
+    # spawn(4); streams 5 and 6 are new for addendum A2.
+    s_truth, s_report, s_outage, s_audit, s_shared, s_label = ss.spawn(6)
     u_truth = np.random.default_rng(s_truth).random((sc.n, len(CHECKS)))
     u_report = np.random.default_rng(s_report).random((sc.n, len(ORACLES), len(CHECKS)))
     u_outage = np.random.default_rng(s_outage).random((sc.n, len(ORACLES)))
     u_audit = np.random.default_rng(s_audit).random(sc.n)
+    u_shared = np.random.default_rng(s_shared).random((sc.n, len(CHECKS)))
+    u_label = np.random.default_rng(s_label).random((sc.n, len(CHECKS)))
 
     truth, reports = [], []
     for t in range(sc.n):
@@ -74,11 +80,13 @@ def make_world(sc: Scenario, seed: int) -> World:
                     r[(i, k)] = None
                 elif k == "restr" and i in sc.blind_restr:
                     r[(i, k)] = PASS                    # cannot see pending proceedings
+                elif i in ("R", "S") and u_shared[t, ki] < sc.shared_rho:
+                    r[(i, k)] = -g[k]                   # A2/R2: one stale record, copied by both
                 else:
                     correct = u_report[t, ii, ki] < sc.accuracy(i, k, t)
                     r[(i, k)] = g[k] if correct else -g[k]
         reports.append(r)
-    return World(sc, seed, truth, reports, u_audit)
+    return World(sc, seed, truth, reports, u_audit, u_label)
 
 
 # ---- Scenario registry (protocol, Scenarios; values approved as P3-P5) ----

@@ -52,3 +52,9 @@ Appended automatically by run_experiments.py. Record the git commit hash by hand
 - A1 run: `python run_addendum_coverage.py` (seeds 1–100, S1–S4, gates G0/G1/G2, F0); analysis: `python analysis/addendum_A1.py results/final analysis/out`.
 - Regression check passed: gate G2 reproduces the main-study counts exactly (2,000 runs).
 - Diagnostic: no weighted mechanism committed any transfer with a single-responder check under G2 (outages remove an office from all three checks, so a lone responder always fails coverage on another check).
+
+## 2026-10-28 — addendum A2 committed before running
+- commit: a44e83311dd7d19a9c76efcd45d2fe7ce0d85266 (docs/addendum_A2_robustness.md); exploratory robustness study; all results to be reported
+- A2 run: `python run_addendum_robustness.py` (seeds 1–100); analysis: `python analysis/addendum_A2.py results/final analysis/out`; figure: `python analysis/addendum_A2_figure.py results/final analysis/out`.
+- Check passed: every main-study level in A2 reproduces the main results exactly (R1a 0.75, R1b 0.95, R2 ρ=0, R3 e=0 under F0 and F1).
+- Verdicts (68 comparisons): 67 hold, 1 weakens (C2 at off-home accuracy 0.60), 0 reverse.

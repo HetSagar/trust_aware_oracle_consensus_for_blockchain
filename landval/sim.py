@@ -14,6 +14,7 @@ class Feedback:
     regime: str = "F0"     # "F0": every transfer labelled; "F1": escalations + audit sample
     audit: float = 0.0     # audit rate a for committed transfers (F1)
     delay: int = 0         # label delay d in transfers
+    label_noise: float = 0.0   # A2/R3: chance each check's recorded truth is flipped
 
     def __post_init__(self):
         if self.regime not in ("F0", "F1"):
@@ -48,7 +49,11 @@ def run(world: World, mech: Mechanism, p: Params = Params(),
         while queue and queue[0][0] <= t:
             _, j = queue.popleft()
             if mech.learns:
-                store.update(world.reports[j], world.truth[j], p.alpha)
+                label = world.truth[j]
+                if fb.label_noise > 0:                 # noisy review/audit; metrics keep the truth
+                    label = {k: (-v if world.label_u[j, ki] < fb.label_noise else v)
+                             for ki, (k, v) in enumerate(label.items())}
+                store.update(world.reports[j], label, p.alpha)
             applied += 1
 
         reports = world.reports[t]
