@@ -164,7 +164,7 @@ def fig3_feedback():
     ax.set_xlabel("Audit rate of committed requests, a")
     ax.set_ylabel("False-commit rate of P, FCR (%)")
     ax.legend(frameon=False, loc="lower right")
-    save(fig, "fig3_feedback")
+    save(fig, "figS1_feedback")
 
 
 def fig4_robustness():
@@ -188,7 +188,7 @@ def fig4_robustness():
     h, l = axes[0].get_legend_handles_labels()
     fig.legend(h, l, loc="lower center", ncol=4, frameon=False, bbox_to_anchor=(0.5, -0.06))
     fig.tight_layout(rect=(0, 0.08, 1, 1), w_pad=0.8)
-    save(fig, "fig4_robustness")
+    save(fig, "fig3_robustness")
 
 
 # ------------------------------------------------------------------ tables
@@ -225,7 +225,7 @@ def add(num, label, caption, header, rows, colspec, notes=None, tex_header=None)
 
 def build_tables():
     # Table 1 related work (cells: verified sources only; '?' = full text not yet read)
-    add(1, "tab:related", "Comparison with related work",
+    add("1", "tab:related", "Comparison with related work",
         ["Work", "Land records", "Multi-source", "Per-claim authority", "Learned trust",
          "Pre-commit conflict check", "Escalates", "Ground truth"],
         [["Thakur et al. [1]", "yes", "yes (nodes)", "no", "no", "no (deferred)", "manual", "no"],
@@ -241,7 +241,7 @@ def build_tables():
         "† Full text not yet read; ? = not determined. ‡ Compared at abstract level only. "
         "n.s. = not stated in the abstract; unsup. = estimated without labels; reput. = reputation; aggreg. = aggregation of node reports; sim. = simulation; — = not applicable to a survey.")
     # Table 2 evidence normalisation
-    add(2, "tab:normalisation", "Illustrative meaning of each simulated report (+1 / −1; ∅ = no response)",
+    add("S1", "tab:normalisation", "Illustrative meaning of each simulated report (+1 / −1; ∅ = no response)",
         ["Office", "own: seller is recorded holder", "deed: deed registered, matching", "restr: no pending proceeding"],
         [["Revenue", "Home. +1 record of rights names the seller; −1 names another", "+1 mutation file cites a matching deed; −1 no match",
           "+1 no pending revenue proceeding noted; −1 one is noted"],
@@ -252,7 +252,7 @@ def build_tables():
         "@{}" + RL + "p{1.5cm}*{3}{" + RL + "X}@{}",
         "Simulated signals only; not claims about the records real offices hold or certify.")
     # Table 3 authority
-    add(3, "tab:authority", "Claim-specific authority A(i,k) (modelling assumption)",
+    add("2", "tab:authority", "Claim-specific authority A(i,k) (modelling assumption)",
         ["Check", "Revenue", "Sub-Registrar", "Judiciary"],
         [[k] + [f"{DEFAULT_AUTHORITY[(i, k)]:.1f}" for i in ORACLES] for k in CHECKS], "@{}lccc@{}")
     # Table 4 worked example (computed from the frozen model)
@@ -270,13 +270,13 @@ def build_tables():
         nice = {"restr:LOW_SUPPORT": "restr: low support", "RESTRICTION_REPORTED": "veto: proceeding reported"}
         rows.append([lab, sup, dd.label, ", ".join(nice.get(x, x) for x in dd.reasons) or "\u2014",
                      "false commit" if dd.commit else "escalated"])
-    add(4, "tab:example", f"Worked example: request {t + 1} in S5a, seed 1, with a pending proceeding visible only to the Judiciary",
+    add("3", "tab:example", f"Worked example: request {t + 1} in S5a, seed 1, with a pending proceeding visible only to the Judiciary",
         ["Mechanism", "Support for\n‘clear’ on restr", "Decision", "Reason code", "Outcome"], rows,
         "@{}lcl" + RL + "Xl@{}",
         f"Truth: own pass, deed pass, restr pending (request invalid). Reports (own, deed, restr): {rep}. "
         "Trust under ideal feedback at that point: R, S and J on restr ≈ 1.00; θ = 0.65.")
     # Table 5 scenarios
-    add(5, "tab:scenarios", "Scenarios; each changes one setting from S1",
+    add("4", "tab:scenarios", "Scenarios; each changes one setting from S1",
         ["Scenario", "Change from S1", "RQ"],
         [["S1 Aligned", "None: authority matches each office’s most accurate check", "1"],
          ["S2 Degraded", "From request 251, Revenue accuracy 0.50 on all checks", "2"],
@@ -286,7 +286,7 @@ def build_tables():
          ["S5b Alt. authority", "As S5a, with A(R, restr) = A(S, restr) = 0.6", "4"]],
         "@{}l" + RL + "Xc@{}")
     # Table 6 mechanisms
-    add(6, "tab:mechanisms", "Mechanisms compared",
+    add("5", "tab:mechanisms", "Mechanisms compared",
         ["Mechanism", "Weight", "Pass rule per check", "Coverage gate", "Veto", "Learns"],
         [["B1 Majority", "1", "> half of responders", "≥ 2 of 3 responded", "no", "no"],
          ["B2 Authority-only", "A(i,k)", "S_k ≥ θ", "Q_k ≥ 0.5", "no", "no"],
@@ -304,7 +304,7 @@ def build_tables():
         rows.append(r)
     fsd = t1.xs("std", axis=1, level=1)
     sel = fsd.loc[[i for i in fsd.index if i[0] in ("B1", "B2", "B3", "P-V") and i[1] in ("S1", "S2", "S3", "S4")]]
-    add(7, "tab:main", "False-commit rate (FCR) and valid-commit coverage (VCC), %, mean over 100 seeds, ideal feedback",
+    add("6", "tab:main", "False-commit rate (FCR) and valid-commit coverage (VCC), %, mean over 100 seeds, ideal feedback",
         ["Mechanism", "S1 FCR", "S1 VCC", "S2 FCR", "S2 VCC", "S3 FCR", "S3 VCC", "S4 FCR", "S4 VCC"], rows,
         "@{}l*{8}{c}@{}",
         f"Between-seed SD: FCR {sel.FCR.min():.2f}–{sel.FCR.max():.2f}, VCC {sel.VCC.min():.1f}–{sel.VCC.max():.1f}. "
@@ -329,7 +329,7 @@ def build_tables():
         diff = "0" if r.identical else f"{fmt(r.mean_diff)} [{fmt(r.ci_low)}, {fmt(r.ci_high)}]"
         p = "—" if r.id == "H3" else ("<0.001" if r.p_holm < 0.001 else f"{r.p_holm:.2f}")
         rows.append([r.id, names[r.id], diff.replace("-", "−"), hw, p, reading.get(r.wording, r.wording)])
-    add(8, "tab:primary", "Pre-specified paired comparisons (100 seeds; percentage points; breaches per 1,000 requests)",
+    add("7", "tab:primary", "Pre-specified paired comparisons (100 seeds; percentage points; breaches per 1,000 requests)",
         ["ID", "Metric: comparison (scenario)", "Difference [95% CI]", "Half-width", "Holm p", "Reading"], rows,
         "@{}l" + RL + "Xccc" + RL + "p{1.55cm}@{}",
         "† Above the precision target Δ/2 at the 100-seed cap. H3 is descriptive. H5 was one-sided (F1 higher).")
@@ -346,7 +346,7 @@ def build_tables():
                 x = a1[(a1.comparison == comp) & (a1.scenario == sc) & (a1.metric == met)].iloc[0]
                 r.append(f"{fmt(x.mean_diff)} [{fmt(x.ci_low)}, {fmt(x.ci_high)}]".replace("-", "−"))
             rows.append(r)
-    add(9, "tab:ablation", "Exploratory coverage-gate ablation A1 (paired 95% CIs, 100 seeds, percentage points)",
+    add("S2", "tab:ablation", "Exploratory coverage-gate ablation A1 (paired 95% CIs, 100 seeds, percentage points)",
         ["Comparison", "Scenario", "FCR difference", "VCC difference"], rows, "@{}" + RL + "Xccc@{}")
     # Table 10 robustness summary (computed); two-line cells
     a2 = pd.read_csv(AOUT / "A2_conclusions.csv")
@@ -364,20 +364,20 @@ def build_tables():
             held = (q.verdict == "holds").sum()
             r.append(f"{held}/{len(q)}\n({q.fcr_diff.min():+.1f} to {q.fcr_diff.max():+.1f})".replace("-", "−"))
         rows.append(r)
-    add(10, "tab:robustness", "Exploratory robustness study A2: levels at which each main conclusion holds, with the range of FCR differences in points",
+    add("8", "tab:robustness", "Exploratory robustness study A2: levels at which each main conclusion holds, with the range of FCR differences in points",
         ["Factor varied", "C1 (S1)", "C1 (S2)", "C2", "C3"], rows, "@{}" + RL + "Xcccc@{}",
         "C1: hybrid below majority. C2: hybrid below authority-only after degradation (requests 251–"
         "1000). C3: trust-only below hybrid (S2). Holds: the 95% CI excludes 0 with the main-study sign. No conclusion reversed.")
     # Appendix tables
-    add(11, "tab:status", "Status of every result",
+    add("S3", "tab:status", "Status of every result",
         ["Result", "Status"],
-        [["Tables 7–8; Figs. 2–3; q_min sweep", "Pre-specified (frozen protocol); five analysis choices in Table 12"],
+        [["Tables 6–7; Fig. 2; Fig. S1; q_min sweep", "Pre-specified (frozen protocol); five analysis choices in Table S4"],
          ["Veto bound (Sect. 3)", "Analytic, derived before the protocol freeze"],
          ["Counts per 1,000 requests; quoted trust values", "Descriptive re-expression of pre-specified runs"],
          ["Two-sided test for H5", "Exploratory, added after results were seen"],
-         ["Table 9 (A1); Table 10 and Fig. 4 (A2)", "Exploratory; addenda committed before running"]],
+         ["Table S2 (A1); Table 8 and Fig. 3 (A2)", "Exploratory; addenda committed before running"]],
         "@{}" + RL + "p{4.8cm}" + RL + "X@{}")
-    add(12, "tab:notes", "Analysis choices not covered by the frozen protocol (accepted by the supervisor)",
+    add("S4", "tab:notes", "Analysis choices not covered by the frozen protocol (accepted by the supervisor)",
         ["#", "Situation", "Choice"],
         [["1", "H4 has zero variance", "Interval is the point 0; p = 1.0 in the Holm family"],
          ["2", "H1b has no direction", "Two-sided test inside the Holm family of seven"],
@@ -402,7 +402,7 @@ def write_tex():
         body = [r"% Auto-generated by paper_assets/build_assets.py from saved results -- do not edit numbers by hand.",
                 r"% Preamble needs: \usepackage{booktabs,array,tabularx,makecell}",
                 r"\begin{table}[tb]", r"\centering", rf"\caption{{{tex_escape(cap)}}}\label{{{label}}}",
-                r"\small" if num == 3 else r"\footnotesize", r"\setlength{\tabcolsep}{%s}" % ("2pt" if num == 1 else "3pt"),
+                r"\small" if num == "2" else r"\footnotesize", r"\setlength{\tabcolsep}{%s}" % ("2pt" if num == "1" else "3pt"),
                 r"\renewcommand{\arraystretch}{1.1}", open_env, r"\toprule"]
         body += tex_header if tex_header else [" & ".join(tex_cell(h) for h in header) + r" \\"]
         body += [r"\midrule"]
@@ -411,13 +411,13 @@ def write_tex():
         if notes:
             body += [r"\par\smallskip", rf"\parbox{{\textwidth}}{{\scriptsize {tex_escape(notes)}}}"]
         body += [r"\end{table}"]
-        (TAB / f"tab{num:02d}_{label.split(':')[1]}.tex").write_text("\n".join(body) + "\n")
+        (TAB / f"tab{num.zfill(2)}_{label.split(':')[1]}.tex").write_text("\n".join(body) + "\n")
 
 
 DOCX_WIDTHS_MM = {   # column widths per table, each row summing to <= 122 mm (LNCS text width)
-    1: [20] + [14.5] * 7, 2: [17, 35, 35, 35], 3: [22, 24, 26, 24], 4: [25, 21, 16, 37, 21],
-    5: [32, 80, 10], 6: [26, 20, 25, 27, 11, 13], 7: [26] + [12] * 8, 8: [9, 45, 32, 13, 11, 12],
-    9: [52, 14, 28, 28], 10: [32, 22.5, 22.5, 22.5, 22.5], 11: [52, 70], 12: [6, 46, 70]}
+    "1": [20] + [14.5] * 7, "S1": [17, 35, 35, 35], "2": [22, 24, 26, 24], "3": [25, 21, 16, 37, 21],
+    "4": [32, 80, 10], "5": [26, 20, 25, 27, 11, 13], "6": [26] + [12] * 8, "7": [9, 45, 32, 13, 11, 12],
+    "S2": [52, 14, 28, 28], "8": [32, 22.5, 22.5, 22.5, 22.5], "S3": [52, 70], "S4": [6, 46, 70]}
 SUBS = {"S_k": ("S", "k"), "Q_k": ("Q", "k"), "T_ik": ("T", "ik"), "q_min": ("q", "min")}
 
 
@@ -477,7 +477,10 @@ def write_docx():
                       "into the Springer LNCS Word template and apply its table-caption style. Numbers are "
                       "generated from the saved results; do not retype them.")
     r.italic, r.font.size = True, Pt(8)
-    for num, label, cap, header, rows, spec, notes, _th in TABLES:
+    order = sorted(TABLES, key=lambda t: (t[0].startswith("S"), int(t[0].lstrip("S"))))
+    for num, label, cap, header, rows, spec, notes, _th in order:
+        if num == "S1":
+            sp = doc.add_paragraph(); sr = sp.add_run("Supplementary tables (not counted in the 10 pages)"); sr.bold = True
         p = doc.add_paragraph()
         p.alignment = WD_ALIGN_PARAGRAPH.CENTER
         pf = p.paragraph_format
@@ -488,7 +491,7 @@ def write_docx():
         tb = doc.add_table(rows=len(rows) + 1, cols=len(header))
         tb.alignment = WD_TABLE_ALIGNMENT.CENTER
         tb.autofit = False
-        size = Pt(9) if num == 3 else (Pt(7.5) if num == 1 else Pt(8))
+        size = Pt(9) if num == "2" else (Pt(7.5) if num == "1" else Pt(8))
         for ri, data in enumerate([header] + rows):
             row = tb.rows[ri]
             no_split(row)

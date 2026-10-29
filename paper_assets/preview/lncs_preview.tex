@@ -9,7 +9,7 @@
 \renewcommand{\figurename}{Fig.}
 \graphicspath{{../figures/}}
 \begin{document}
-\section*{LNCS fit check}
+\section*{LNCS fit check: paper (Figs. 1--3, Tables 1--8)}
 Each float below is included exactly as in the paper. An overfull box warning in the log means a float is wider than the 122 mm text area.
 
 \begin{figure}[tb]
@@ -20,14 +20,13 @@ Each float below is included exactly as in the paper. An overfull box warning in
 \end{figure}
 
 \input{../tables/tab01_related.tex}
-\input{../tables/tab02_normalisation.tex}
-\input{../tables/tab03_authority.tex}
-\input{../tables/tab04_example.tex}
+\input{../tables/tab02_authority.tex}
+\input{../tables/tab03_example.tex}
 \clearpage
-\input{../tables/tab05_scenarios.tex}
-\input{../tables/tab06_mechanisms.tex}
-\input{../tables/tab07_main.tex}
-\input{../tables/tab08_primary.tex}
+\input{../tables/tab04_scenarios.tex}
+\input{../tables/tab05_mechanisms.tex}
+\input{../tables/tab06_main.tex}
+\input{../tables/tab07_primary.tex}
 \clearpage
 \begin{figure}[tb]
 \centering
@@ -35,22 +34,27 @@ Each float below is included exactly as in the paper. An overfull box warning in
 \caption{Commit-threshold trade-off after Revenue degrades (S2): false-commit rate against valid-commit coverage as $\theta$ varies from 0.50 to 0.90 in steps of 0.05 (means over 100 seeds, ideal feedback)}
 \label{fig:threshold}
 \end{figure}
+\input{../tables/tab08_robustness.tex}
 \begin{figure}[tb]
 \centering
-\includegraphics{fig3_feedback.pdf}
-\caption{False-commit rate of P under realistic feedback F1 in S2, by audit rate and label delay; whiskers are between-seed 95\% CIs, the dashed line and band show ideal feedback F0}
-\label{fig:feedback}
-\end{figure}
-\clearpage
-\input{../tables/tab09_ablation.tex}
-\input{../tables/tab10_robustness.tex}
-\begin{figure}[tb]
-\centering
-\includegraphics{fig4_robustness.pdf}
+\includegraphics{fig3_robustness.pdf}
 \caption{Exploratory robustness study A2 (100 seeds): false-commit rate by mechanism as (a) off-home accuracy, (b) the shared error rate of Revenue and Sub-Registrar and (c) label noise vary; dotted lines mark the main-study settings}
 \label{fig:robustness}
 \end{figure}
 \clearpage
-\input{../tables/tab11_status.tex}
-\input{../tables/tab12_notes.tex}
+\section*{Supplementary material (Fig. S1, Tables S1--S4)}
+\setcounter{table}{0}\setcounter{figure}{0}
+\renewcommand{\thetable}{S\arabic{table}}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\input{../tables/tabS1_normalisation.tex}
+\input{../tables/tabS2_ablation.tex}
+\begin{figure}[tb]
+\centering
+\includegraphics{figS1_feedback.pdf}
+\caption{False-commit rate of P under realistic feedback F1 in S2, by audit rate and label delay; whiskers are between-seed 95\% CIs, the dashed line and band show ideal feedback F0}
+\label{fig:feedback}
+\end{figure}
+\clearpage
+\input{../tables/tabS3_status.tex}
+\input{../tables/tabS4_notes.tex}
 \end{document}

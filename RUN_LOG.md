@@ -58,3 +58,9 @@ Appended automatically by run_experiments.py. Record the git commit hash by hand
 - A2 run: `python run_addendum_robustness.py` (seeds 1–100); analysis: `python analysis/addendum_A2.py results/final analysis/out`; figure: `python analysis/addendum_A2_figure.py results/final analysis/out`.
 - Check passed: every main-study level in A2 reproduces the main results exactly (R1a 0.75, R1b 0.95, R2 ρ=0, R3 e=0 under F0 and F1).
 - Verdicts (68 comparisons): 67 hold, 1 weakens (C2 at off-home accuracy 0.60), 0 reverse.
+
+## 2026-10-29 — paper assets renumbered for the 10-page paper
+- `python paper_assets/build_assets.py` regenerates every figure and table from saved results; no simulation was re-run and no number changed.
+- Paper: Figs. 1–3 (system, threshold trade-off, robustness), Tables 1–8. Supplementary: Fig. S1 (realistic feedback), Tables S1–S4 (report meanings, A1 ablation, result status, analysis choices).
+- Fit check `paper_assets/preview/lncs_preview.pdf`: 0 overfull boxes. Page budget `paper_assets/preview/final10_budget.pdf`: 10 pages with references (one 0.7 pt overfull line, the repository URL).
+- Correction carried into the final draft: H2a window FCR is 5.52 vs 6.81 (difference −1.28); Drafts v2/v3 rounded it as 5.53 / −1.29.
